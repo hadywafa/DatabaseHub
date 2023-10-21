@@ -1,0 +1,487 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "AdventureWorks2012Context",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "EF_AdvectureWorks",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[AWBuildVersion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DatabaseLog]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ErrorLog]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HumanResources].[Department]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HumanResources].[Employee]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HumanResources].[EmployeeDepartmentHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HumanResources].[EmployeePayHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HumanResources].[JobCandidate]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HumanResources].[Shift]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[Address]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[AddressType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[BusinessEntity]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[BusinessEntityAddress]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[BusinessEntityContact]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[ContactType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[CountryRegion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[EmailAddress]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[Password]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[Person]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[PersonPhone]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[PhoneNumberType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Person].[StateProvince]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[BillOfMaterials]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[Culture]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[Document]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[Illustration]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[Location]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[Product]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductCategory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductCostHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductDescription]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductDocument]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductInventory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductListPriceHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductModelIllustration]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductModelProductDescriptionCulture]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductPhoto]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductProductPhoto]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductReview]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ProductSubcategory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[ScrapReason]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[TransactionHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[TransactionHistoryArchive]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[UnitMeasure]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[WorkOrder]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Production].[WorkOrderRouting]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Purchasing].[ProductVendor]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Purchasing].[PurchaseOrderDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Purchasing].[PurchaseOrderHeader]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Purchasing].[ShipMethod]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Purchasing].[Vendor]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[CountryRegionCurrency]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[CreditCard]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[Currency]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[CurrencyRate]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[Customer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[PersonCreditCard]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesOrderDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesOrderHeader]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesOrderHeaderSalesReason]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesPerson]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesPersonQuotaHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesReason]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesTaxRate]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesTerritory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SalesTerritoryHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[ShoppingCartItem]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SpecialOffer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[SpecialOfferProduct]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Sales].[Store]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[HumanResources].[vEmployee]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[HumanResources].[vEmployeeDepartment]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[HumanResources].[vEmployeeDepartmentHistory]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[HumanResources].[vJobCandidate]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[HumanResources].[vJobCandidateEducation]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[HumanResources].[vJobCandidateEmployment]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Person].[vAdditionalContactInfo]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Person].[vStateProvinceCountryRegion]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Production].[vProductAndDescription]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Production].[vProductModelCatalogDescription]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Production].[vProductModelInstructions]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Purchasing].[vVendorWithAddresses]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Purchasing].[vVendorWithContacts]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Sales].[vIndividualCustomer]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Sales].[vPersonDemographics]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Sales].[vSalesPerson]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Sales].[vSalesPersonSalesByFiscalYears]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Sales].[vStoreWithAddresses]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Sales].[vStoreWithContacts]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Sales].[vStoreWithDemographics]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[uspGetBillOfMaterials]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[uspGetEmployeeManagers]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[uspGetManagerEmployees]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[uspGetWhereUsedProductID]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[uspLogError]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[uspPrintError]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[uspSearchCandidateResumes]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[HumanResources].[uspUpdateEmployeeHireInfo]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[HumanResources].[uspUpdateEmployeeLogin]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[HumanResources].[uspUpdateEmployeePersonalInfo]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ufnGetAccountingEndDate]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetAccountingStartDate]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetContactInformation]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetDocumentStatusText]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetProductDealerPrice]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetProductListPrice]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetProductStandardCost]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetPurchaseOrderStatusText]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetSalesOrderStatusText]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnGetStock]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[ufnLeadingZeros]",
+         "ObjectType": 2
+      }
+   ],
+   "UiHint": "hadywafa.AdventureWorks2012.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": true,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": true,
+   "UseSchemaFolders": true,
+   "UseSchemaNamespaces": true,
+   "UseSpatial": false,
+   "UseT4": false
+}
