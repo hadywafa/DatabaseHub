@@ -1,0 +1,17 @@
+{
+  "explorerExclude.backup": {},
+  "files.exclude": {
+    "**/*.dll": true,
+    "**/*.exe": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/bin": true,
+    "**/obj": true,
+    "**/.vs": true,
+    "**/node_modules": true
+  }
+}
