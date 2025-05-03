@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  mysql-db:
+    image: mysql:8.0.40-debian
+    container_name: mysql-db
+    hostname: mysql-db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - C:\DockerVolumes\mysql\data:/var/lib/mysql
+    ports:
+      - 3306:3306
+      - 33060:33060
+    environment:
+      MYSQL_ROOT_PASSWORD: "P@ssw0rd"
+
+  mysql-workbench:
+    image: linuxserver/mysql-workbench:latest
+    container_name: mysql-workbench
+    hostname: mysql-workbench
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - C:\DockerVolumes\mysql\workbench:/config
+    ports:
+      - 9000:3000
+    cap_add:
+      - IPC_LOCK
+    restart: unless-stopped
