@@ -5,6 +5,26 @@
 ### 1) Second highest salary
 
 ```sql
+SELECT salary
+FROM Employees
+ORDER BY salary DESC
+OFFSET 1 ROW FETCH NEXT 1 ROW ONLY;
+```
+
+or
+
+```sql
+SELECT emp_id, emp_name, salary
+From (
+    SELECT emp_id, emp_name, salary,
+    ROW_NUMBER() OVER(ORDER BY salary DESC) as rank
+) as sub
+Where sub.rank = 2
+```
+
+or
+
+```sql
 SELECT emp_id, emp_name, salary
 FROM (
   SELECT e.*, DENSE_RANK() OVER (ORDER BY salary DESC) AS rk
