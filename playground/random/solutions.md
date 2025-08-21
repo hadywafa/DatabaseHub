@@ -489,18 +489,53 @@ GROUP BY p.category
 ORDER BY total_sales DESC;
 ```
 
-## ❌ **21. Products never ordered**
+## **21. Products never ordered**
 
 ```sql
+-- ❌ Wrong
+-- Why? Because you're joining on product_id, and if there's no match, oi.product_id will be NULL. oi.order_id might still exist in other contexts, so it's not the safest null check here.
+
+SELECT
+    P.*
+FROM Products p
+LEFT JOIN OrderItems oi
+    on oi.product_id = p.product_id
+WHERE oi.order_id IS NULL
+```
+
+```sql
+-- ✅
 SELECT p.*
 FROM Products p
 LEFT JOIN OrderItems oi ON oi.product_id = p.product_id
-WHERE oi.order_id IS NULL;
+WHERE oi.product_id IS NULL;
 ```
 
-## ❌ **22. Top 3 best-selling products by quantity**
+## **22. Top 3 best-selling products by quantity**
 
 ```sql
+-- ✅
+WITH counted AS (
+    SELECT
+        oi.product_id,
+        SUM(oi.quantity) AS total_quantity
+    FROM OrderItems oi
+    GROUP BY oi.product_id
+),
+ranked AS (
+    SELECT
+        product_id,
+        ROW_NUMBER() OVER (ORDER BY total_quantity DESC) AS rnk
+    FROM counted
+)
+SELECT p.*
+FROM ranked r
+JOIN Products p ON p.product_id = r.product_id
+WHERE r.rnk <= 3;
+```
+
+```sql
+-- ✅
 SELECT TOP (3) p.product_id, p.product_name,
        SUM(oi.qty) AS total_qty
 FROM OrderItems oi
@@ -509,27 +544,31 @@ GROUP BY p.product_id, p.product_name
 ORDER BY total_qty DESC, p.product_name;
 ```
 
-## ❌ **23. Products priced above overall average price**
+## **23. Products priced above overall average price**
 
 ```sql
-SELECT p.*
-FROM Products p
-CROSS JOIN (SELECT AVG(unit_price) AS avg_price FROM Products) a
-WHERE p.unit_price > a.avg_price
-ORDER BY p.unit_price DESC;
+-- ✅
+SELECT *
+FROM Products
+WHERE price > (
+    SELECT AVG(price)
+    FROM Products
+);
 ```
 
-## ❌ **24. Products out of stock**
+## **24. Products out of stock**
 
 ```sql
+-- ✅
 SELECT *
 FROM Products
 WHERE stock_qty = 0;
 ```
 
-## ❌ **25. Total revenue by product**
+## **25. Total revenue by product**
 
 ```sql
+-- ✅
 SELECT p.product_id, p.product_name,
        SUM(oi.qty * oi.price) AS revenue
 FROM OrderItems oi
@@ -538,9 +577,30 @@ GROUP BY p.product_id, p.product_name
 ORDER BY revenue DESC, p.product_name;
 ```
 
-## ❌ **26. Products ordered by more than 10 different customers**
+## **26. Products ordered by more than 10 different customers**
 
 ```sql
+-- ✅
+-- COUNT(DISTINCT o.cust_id): Ensures you're counting unique customers per product.
+WITH products_count_per_customer AS (
+    SELECT
+        oi.product_id,
+        COUNT(DISTINCT o.cust_id) AS customer_count
+    FROM OrderItems oi
+    JOIN Orders o ON o.order_id = oi.order_id
+    GROUP BY oi.product_id
+)
+SELECT
+    p.product_id,
+    p.product_name,
+    customer_count
+FROM products_count_per_customer pcpc
+JOIN Products p ON p.product_id = pcpc.product_id
+WHERE pcpc.customer_count > 10;
+```
+
+```sql
+-- ✅
 SELECT p.product_id, p.product_name,
        COUNT(DISTINCT o.cust_id) AS unique_customers
 FROM OrderItems oi
