@@ -1,9 +1,65 @@
-# Solutions
+# 📑 Solutions
 
 <details>
 <summary class="header">✅ Employee & Salary Related</summary>
 
-## **1. Second highest salary**
+## 📌 **1. Second highest salary**
+
+### ❌ Wrong Approaches
+
+```sql
+SELECT emp_id, emp_name, salary,
+       RANK() OVER (ORDER BY salary) AS rank
+FROM Employee
+WHERE rank = 2;
+```
+
+> Error: _Invalid column name 'rank'_
+>
+> - `WHERE` is evaluated **before** the window function (`RANK()`) is computed.
+> - You can’t directly filter on the alias inside the same query.
+
+---
+
+### ✅ Correct Approaches
+
+#### **Option 1: Subquery / CTE**
+
+Wrap it in a subquery so you can filter on the computed rank:
+
+```sql
+WITH Ranked AS (
+    SELECT
+        emp_id, emp_name, salary,
+        RANK() OVER (ORDER BY salary DESC) AS rnk
+    FROM Employees
+)
+SELECT emp_id, emp_name, salary
+FROM Ranked
+WHERE rnk = 2;
+```
+
+If salaries can tie, and you want the “second highest” regardless of duplicates:
+
+```sql
+WITH Ranked AS (
+    SELECT
+        emp_id, emp_name, salary,
+        DENSE_RANK() OVER (ORDER BY salary DESC) AS dr
+    FROM Employees
+)
+SELECT *
+FROM Ranked
+WHERE dr = 2;
+```
+
+- Use `ORDER BY salary DESC` so **highest salary = rank 1, second highest = rank 2**.
+
+---
+
+#### **Option 2: Order with OFFSET**
+
+Classic approach without OFFSET:
 
 ```sql
 -- ✅ Done
@@ -13,70 +69,89 @@ ORDER BY salary DESC
 OFFSET 1 ROW FETCH NEXT 1 ROW ONLY;
 ```
 
+---
+
+#### **Option 3: `DENSE_RANK()`**
+
+If salaries can tie, and you want the “second highest” regardless of duplicates:
+
 ```sql
--- ✅ Done
-SELECT emp_id, emp_name, salary
-From (
-    SELECT emp_id, emp_name, salary,
-    ROW_NUMBER() OVER(ORDER BY salary DESC) as rank
-) as sub
-Where sub.rank = 2
+WITH Ranked AS (
+    SELECT
+        emp_id, emp_name, salary,
+        DENSE_RANK() OVER (ORDER BY salary DESC) AS dr
+    FROM Employees
+)
+SELECT *
+FROM Ranked
+WHERE dr = 2;
 ```
 
-```sql
--- ✅ Done
-SELECT emp_id, emp_name, salary
-FROM (
-  SELECT e.*, DENSE_RANK() OVER (ORDER BY salary DESC) AS rk
-  FROM Employees e
-) x
-WHERE rk = 2;
-```
+---
 
-## **2. Top 3 highest-paid employees**
+## 📌 **2. Top 3 highest-paid employees**
+
+### ❌ Wrong Approaches
 
 ```sql
--- ⚠️ Warn
--- there is may be another employees with same 3 highest-paid
 SELECT TOP 3 emp_name, salary
 FROM Employees
 ORDER BY salary DESC
 ```
 
 ```sql
--- ⚠️ Warn
--- there is may be another employees with same 3 highest-paid
 SELECT emp_name, salary
 FROM Employees
 ORDER BY salary DESC
 OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY;
 ```
 
+> there is may be another employees with same 3 highest-paid
+>
+> - Returns exactly 3 rows.
+> - If two or more employees tie on the 3rd salary, only 3 rows will be shown — ties are cut off.
+
+---
+
+### ✅ Correct Approaches
+
 ```sql
--- ✅ Done
+WITH Ranked AS (
+    SELECT
+        emp_name,
+        salary,
+        DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+    FROM Employees
+)
 SELECT emp_name, salary
-FROM (
-  SELECT emp_name, salary,
-         DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
-  FROM Employees
-) x
+FROM Ranked
 WHERE rnk <= 3
-ORDER BY salary DESC, emp_name;
+ORDER BY salary DESC;
+
 ```
 
-## **3. Employees earning above company average**
+---
+
+## 📌 **3. Employees earning above company average**
+
+### ❌ Wrong Approaches
 
 ```sql
--- ❌ Wrong
--- you can’t reference a column alias (avg_salary) directly in the WHERE clause when it's derived from a window function.
 SELECT *,
 AVG(salary) over() as avg_salary
 FROM Employees
 WHERE salary > avg_salary
 ```
 
+> you can’t reference a column alias (avg_salary) directly in the WHERE clause when it's derived from a window function.
+
+---
+
+### ✅ Correct Approaches
+
+#### **Option 1:**
+
 ```sql
--- ✅ Done
 SELECT emp_name, salary
 FROM Employees
 WHERE salary > (
@@ -85,8 +160,9 @@ WHERE salary > (
 ORDER BY salary DESC;
 ```
 
+#### **Option 2:**
+
 ```sql
--- ✅ Done
 WITH SalaryWithAvg AS (
   SELECT emp_name, salary,
          AVG(salary) OVER () AS avg_salary
@@ -98,7 +174,11 @@ WHERE salary > avg_salary
 ORDER BY salary DESC;
 ```
 
-## **4. Number of employees in each department**
+---
+
+## 📌 **4. Number of employees in each department**
+
+### ✅ Correct Approaches
 
 ```sql
 SELECT d.dept_name, COUNT(*) AS emp_count
@@ -108,10 +188,13 @@ GROUP BY d.dept_name
 ORDER BY d.dept_name;
 ```
 
-## **5. Departments with avg salary > 10,000**
+---
+
+## 📌 **5. Departments with avg salary > 10,000**
+
+### ✅ Correct Approaches
 
 ```sql
--- ✅ Done
 SELECT d.dept_name, AVG(e.salary) AS avg_salary
 FROM Employees e
 JOIN Departments d ON d.dept_id = e.dept_id
@@ -119,41 +202,53 @@ GROUP BY d.dept_name
 HAVING AVG(e.salary) > 10000;
 ```
 
-## **6. Employees without a department**
+---
+
+## 📌 **6. Employees without a department**
+
+### ✅ Correct Approaches
 
 ```sql
--- ✅ Done
 SELECT *
 FROM Employees
 WHERE dept_id IS NULL;
 ```
 
-## **7. Employees who joined in 2022**
+---
+
+## 📌 **7. Employees who joined in 2022**
+
+### ✅ Correct Approaches
 
 ```sql
--- ✅ Done
 SELECT *
 FROM Employees
 WHERE YEAR(hire_date) = 2022;
 ```
 
-## **8. Employees sharing the same salary with someone else**
+---
+
+## 📌 **8. Employees sharing the same salary with someone else**
+
+### ✅ Correct Approaches
+
+#### **Option 1:**
 
 ```sql
--- ✅ Done
 WITH same_salary (
 SELECT
-    e.*, COUNT(*) OVER(PARITION BY salary) as same_salary_count
+    emp_id, emp_name, COUNT(*) OVER(PARITION BY salary) as same_salary_count
 FROM Employees e
 )
-SELECT *
+SELECT emp_id, emp_name
 FROM same_salary
 WHERE same_salary_count > 1
 ```
 
+#### **Option 2:**
+
 ```sql
--- ✅ Done
-SELECT e.*
+SELECT e.emp_id, e.emp_name
 FROM Employees e
 JOIN (
   SELECT salary
@@ -163,6 +258,8 @@ JOIN (
 ) s ON s.salary = e.salary
 ORDER BY e.salary DESC, e.emp_name;
 ```
+
+#### **Option 3:**
 
 ```sql
 -- ✅ Done
@@ -177,38 +274,48 @@ WHERE salary IN (
 ORDER BY salary DESC, emp_name;
 ```
 
-## **9. Highest-paid employee in each department**
+---
+
+## 📌 **9. Highest-paid employee in each department**
+
+### ❌ Wrong Approaches
 
 ```sql
--- ❌ Wrong
--- - SQL requires that every selected column either:
---     - Appears in the GROUP BY clause, or
---     - Is wrapped in an aggregate function (like MAX, SUM, etc.)
-
 SELECT e.*, MAX(salary) AS max_salary
 FROM Employee e
 JOIN Department d ON d.dept_id = e.dept_id
 GROUP BY dept_id
 ```
 
+> SQL requires that every selected column either:
+>
+> - Appears in the GROUP BY clause, or
+> - Is wrapped in an aggregate function (like MAX, SUM, etc.)
+
+---
+
+### ✅ Correct Approaches
+
 ```sql
--- ✅ Done
-WITH ranked AS (
+WITH ranked_by_dept AS (
   SELECT d.dept_name, e.emp_name, e.salary,
-         ROW_NUMBER() OVER (PARTITION BY d.dept_name ORDER BY e.salary DESC, e.emp_name) AS rn
+         ROW_NUMBER() OVER (PARTITION BY d.dept_name ORDER BY e.salary DESC, e.emp_name) AS rnk
   FROM Employees e
   JOIN Departments d ON d.dept_id = e.dept_id
 )
 SELECT dept_name, emp_name, salary
-FROM ranked
-WHERE rn = 1
+FROM ranked_by_dept
+WHERE rnk = 1
 ORDER BY dept_name;
 ```
 
-## **10. Total salary expense per department**
+---
+
+## 📌 **10. Total salary expense per department**
+
+### ✅ Correct Approaches
 
 ```sql
--- ✅ Done
 SELECT d.dept_name, SUM(e.salary) AS total_salary
 FROM Employees e
 JOIN Departments d ON d.dept_id = e.dept_id
@@ -223,44 +330,28 @@ ORDER BY d.dept_name;
 <details>
 <summary class="header">✅ Customer & Orders</summary>
 
-## **11. Customers who never placed an order**
+---
+
+## 📌 **11. Customers who never placed an order**
+
+### ✅ Correct Approaches
 
 ```sql
--- ✅ Done
 SELECT c.*
 FROM Customers c
 LEFT JOIN Orders o ON o.cust_id = c.cust_id
 WHERE o.order_id IS NULL;
 ```
 
-## **12. Top 5 customers by total order amount**
+---
+
+## 📌 **12. Top 5 customers by total order amount**
+
+### ✅ Correct Approaches
+
+#### **Option 1:**
 
 ```sql
---⚠️ wrong
--- your query lists the top 5 individual orders by amount, and then shows the customer who placed each of those orders. So if one customer placed multiple large orders, they might appear more than once — or not at all if their orders are individually smaller.
-
-WITH ordersAmount AS (
-    SELECT
-        oi.order_id,
-        SUM(oi.price * oi.qty) AS amount
-    FROM OrderItems oi
-    GROUP BY oi.order_id
-)
-SELECT TOP(5)
-    c.cust_id,
-    c.cust_name,
-    c.email,
-    om.amount
-FROM Customers c
-JOIN Orders o ON c.cust_id = o.cust_id
-JOIN ordersAmount om ON om.order_id = o.order_id
-ORDER BY om.amount DESC;
-```
-
-```sql
---✅ Done
-
--- This does not first aggregate per order and then per customer. Instead,
 -- it directly aggregates all order items per customer in one step.
 WITH order_totals AS (
   SELECT o.cust_id, SUM(oi.qty * oi.price) AS total_amount
@@ -274,18 +365,57 @@ JOIN Customers c ON c.cust_id = ot.cust_id
 ORDER BY ot.total_amount DESC;
 ```
 
-## **13. Customers who ordered in both 2022 and 2023**
+#### **Option 2:**
 
 ```sql
---⚠️ wrong
--- This returns all customers who placed orders in either 2022 or 2023, not necessarily both
+SELECT TOP 5
+    c.cust_id,
+    c.cust_name,
+    SUM(oi.qty * oi.price) AS total_amount
+FROM Customers c
+JOIN Orders o
+    ON c.cust_id = o.cust_id
+JOIN OrderItems oi
+    ON o.order_id = oi.order_id
+GROUP BY c.cust_id, c.cust_name
+ORDER BY total_amount DESC;
+```
 
+---
+
+## 📌 **13. Customers who ordered in both 2022 and 2023**
+
+### ❌ Wrong Approaches
+
+```sql
 SELECT c.*
 FROM Customers c
 Join Orders o
     On o.cust_id = c.cust_id
 WHERE YEAR(o.order_date) IN (2022,2023)
 ```
+
+> This returns all customers who placed orders in either 2022 or 2023, not necessarily both
+
+---
+
+### ✅ Correct Approaches
+
+#### **Option 1:**
+
+```sql
+SELECT
+    c.cust_id,
+    c.cust_name
+FROM Customers c
+JOIN Orders o
+    ON c.cust_id = o.cust_id
+WHERE YEAR(o.order_date) IN (2022, 2023)
+GROUP BY c.cust_id, c.cust_name
+HAVING COUNT(DISTINCT YEAR(o.order_date)) = 2;
+```
+
+#### **Option 2:**
 
 ```sql
 -- ✅
@@ -295,48 +425,55 @@ WHERE c.cust_id IN (
     SELECT cust_id
     FROM Orders
     WHERE YEAR(order_date) = 2022
+
     INTERSECT
+
     SELECT cust_id
     FROM Orders
     WHERE YEAR(order_date) = 2023
 );
 ```
 
-## **14. Total number of orders per month**
+---
+
+## 📌 **14. Total number of orders per month**
+
+### ❌ Wrong Approaches
 
 ```sql
--- ⚠️ it doesn't include the year, so orders from different years will be grouped together under the same month
-WITH order_new AS (
 SELECT
-    MONTH(o.order_date) as order_month
-FROM Orders o
-)
-SELECT order_month, COUNT(*)
-FROM order_new
+    MONTH(o.order_date) AS order_month,
+    COUNT(*) AS total_orders
+FROM Orders
 GROUP BY order_month
+ORDER BY order_month;
 ```
 
+> ⚡ Tip: If you only group by MONTH(order_date), you’ll merge all Januaries together across years.
+
+---
+
+### ✅ Correct Approaches
+
 ```sql
--- ✅ Done
-WITH order_new AS (
-    SELECT
-        YEAR(o.order_date) AS order_year,
-        MONTH(o.order_date) AS order_month
-    FROM Orders o
-)
 SELECT
-    order_year,
-    order_month,
+    YEAR(o.order_date) AS order_year,
+    MONTH(o.order_date) AS order_month,
     COUNT(*) AS total_orders
-FROM order_new
+FROM Orders
 GROUP BY order_year, order_month
 ORDER BY order_year, order_month;
 ```
 
-## **15. Customers with the highest number of orders (include ties)**
+---
+
+## 📌 **15. Customers with the highest number of orders (include ties)**
+
+### ✅ Correct Approaches
+
+#### **Option 1:**
 
 ```sql
--- ✅
 WITH OrderCounts AS (
     SELECT
         cust_id,
@@ -352,8 +489,9 @@ WHERE oc.order_count = (
 );
 ```
 
+#### **Option 2:**
+
 ```sql
--- ✅
 WITH counts AS (
   SELECT cust_id, COUNT(*) AS order_count
   FROM Orders
@@ -370,10 +508,13 @@ JOIN Customers cu ON cu.cust_id = c.cust_id
 WHERE rnk = 1;
 ```
 
-## **16. Average order value per customer**
+---
+
+## 📌 **16. Average order value per customer**
+
+### ✅ Correct Approaches
 
 ```sql
--- ✅
 WITH orders_amount AS (
 SELECT
     oi.order_id,
@@ -393,26 +534,13 @@ Join Customers c
 GROUP BY c.cust_id, c.cust_name
 ```
 
-```sql
--- ✅
-WITH order_totals AS (
-  SELECT o.order_id, o.cust_id, SUM(oi.qty * oi.price) AS order_total
-  FROM Orders o
-  JOIN OrderItems oi ON oi.order_id = o.order_id
-  GROUP BY o.order_id, o.cust_id
-)
-SELECT c.cust_id, c.cust_name,
-       AVG(ot.order_total) AS avg_order_value
-FROM order_totals ot
-JOIN Customers c ON c.cust_id = ot.cust_id
-GROUP BY c.cust_id, c.cust_name
-ORDER BY avg_order_value DESC;
-```
+---
 
-## **17. Customers with any order value > 5,000**
+## 📌 **17. Customers with any order value > 5,000**
+
+### ✅ Correct Approaches
 
 ```sql
--- ✅
 WITH orders_amount AS (
 SELECT
     oi.order_id,
@@ -432,20 +560,28 @@ WHERE oa.order_amount > 5000
 ORDER BY c.cust_name;
 ```
 
-## **18. Customers who placed orders but have no email**
+---
+
+## 📌 **18. Customers who placed orders but have no email**
+
+### ✅ Correct Approaches
 
 ```sql
--- ✅
-SELECT DISTINCT c.*
+SELECT DISTINCT *
 FROM Customers c
 JOIN Orders o ON o.cust_id = c.cust_id
 WHERE c.email IS NULL OR LTRIM(RTRIM(c.email)) = '';
 ```
 
-## **19. Most recent order date per customer**
+---
+
+## 📌 **19. Most recent order date per customer**
+
+### ✅ Correct Approaches
+
+#### **Option 1:**
 
 ```sql
--- ✅
 WITH RankedOrders AS (
     SELECT
         o.order_id,
@@ -462,8 +598,9 @@ FROM RankedOrders ro
 WHERE ro.rn = 1;
 ```
 
+#### **Option 2:**
+
 ```sql
--- ✅
 SELECT o.cust_id, c.cust_name, MAX(o.order_date) AS last_order_date
 FROM Orders o
 JOIN Customers c ON c.cust_id = o.cust_id
@@ -478,7 +615,9 @@ ORDER BY last_order_date DESC;
 <details>
 <summary class="header">⌛ Products & Inventory</summary>
 
-## **20. Total sales by product category**
+---
+
+## 📌 **20. Total sales by product category**
 
 ```sql
 -- ✅
@@ -489,7 +628,9 @@ GROUP BY p.category
 ORDER BY total_sales DESC;
 ```
 
-## **21. Products never ordered**
+---
+
+## 📌 **21. Products never ordered**
 
 ```sql
 -- ❌ Wrong
@@ -511,7 +652,9 @@ LEFT JOIN OrderItems oi ON oi.product_id = p.product_id
 WHERE oi.product_id IS NULL;
 ```
 
-## **22. Top 3 best-selling products by quantity**
+---
+
+## 📌 **22. Top 3 best-selling products by quantity**
 
 ```sql
 -- ✅
@@ -544,7 +687,9 @@ GROUP BY p.product_id, p.product_name
 ORDER BY total_qty DESC, p.product_name;
 ```
 
-## **23. Products priced above overall average price**
+---
+
+## 📌 **23. Products priced above overall average price**
 
 ```sql
 -- ✅
@@ -556,7 +701,9 @@ WHERE price > (
 );
 ```
 
-## **24. Products out of stock**
+---
+
+## 📌 **24. Products out of stock**
 
 ```sql
 -- ✅
@@ -565,7 +712,9 @@ FROM Products
 WHERE stock_qty = 0;
 ```
 
-## **25. Total revenue by product**
+---
+
+## 📌 **25. Total revenue by product**
 
 ```sql
 -- ✅
@@ -577,7 +726,9 @@ GROUP BY p.product_id, p.product_name
 ORDER BY revenue DESC, p.product_name;
 ```
 
-## **26. Products ordered by more than 10 different customers**
+---
+
+## 📌 **26. Products ordered by more than 10 different customers**
 
 ```sql
 -- ✅
@@ -611,6 +762,8 @@ HAVING COUNT(DISTINCT o.cust_id) > 10
 ORDER BY unique_customers DESC;
 ```
 
+---
+
 ## ❌ **27. Products ordered in last 30 days but not in previous 60**
 
 ```sql
@@ -637,6 +790,8 @@ LEFT JOIN prev60 p6 ON p6.product_id = p.product_id
 WHERE p6.product_id IS NULL;
 ```
 
+---
+
 ## ❌ **28. Most expensive product in each category**
 
 ```sql
@@ -651,6 +806,8 @@ WHERE rn = 1
 ORDER BY category;
 ```
 
+---
+
 ## ❌ **29. Products with low stock (stock_qty < 10)**
 
 ```sql
@@ -659,6 +816,8 @@ FROM Products
 WHERE stock_qty < 10
 ORDER BY stock_qty ASC, product_name;
 ```
+
+---
 
 ## ❌ **30. Total number of unique products ordered by each customer**
 

@@ -1,7 +1,5 @@
 # 📊 SQL Server Practice Questions (Enhanced Descriptions)
 
-## ✅ **Employee & Salary Related**
-
 ```sql
 -- Departments table
 CREATE TABLE Departments (
@@ -18,23 +16,6 @@ CREATE TABLE Employees (
     hire_date DATE NOT NULL
 );
 ```
-
----
-
-**✅ 1.** Retrieve the **second highest salary** from the **Employees** table.  
-**✅ 2.** List the **top 3 highest-paid employees** with their names and salaries.  
-**✅ 3.** Find the **employees who earn more than the average salary** in the company.  
-**❌ 4.** Show the **number of employees in each department**.  
-**✅ 5.** Find the **departments where the average salary is greater than 10,000**.  
-**✅ 6.** Retrieve all employees who **do not belong to any department** (handle NULLs).  
-**✅ 7.** Get the list of employees who **joined in the year 2022**.  
-**✅ 8.** Display employees who have the **same salary as at least one other employee**.  
-**✅ 9.** Find the **highest-paid employee in each department**.  
-**✅ 10.** Show the **total salary expense for each department**.
-
----
-
-## ✅ **Customer & Orders**
 
 ```sql
 -- Customers table
@@ -61,7 +42,33 @@ CREATE TABLE OrderItems (
 );
 ```
 
+```sql
+-- Products table
+CREATE TABLE Products (
+    product_id   INT PRIMARY KEY,
+    product_name NVARCHAR(100) NOT NULL,
+    category     NVARCHAR(100) NOT NULL,
+    unit_price   DECIMAL(12,2) NOT NULL,
+    stock_qty    INT NOT NULL
+);
+```
+
+## ✅ **Employee & Salary Related**
+
+**✅ 1.** Retrieve the **second highest salary** from the **Employees** table.  
+**✅ 2.** List the **top 3 highest-paid employees** with their names and salaries.  
+**✅ 3.** Find the **employees who earn more than the average salary** in the company.  
+**🔥 4.** Show the **count of employees in each department**.  
+**✅ 5.** Find the **departments where the average salary is greater than 10,000**.  
+**✅ 6.** Retrieve all employees who **do not belong to any department** (handle NULLs).  
+**✅ 7.** Get the list of employees who **joined in the year 2022**.  
+**🔥 8.** Display employees who have the **same salary as at least one other employee**.  
+**✅ 9.** Find the **highest-paid employee in each department**.  
+**✅ 10.** Show the **total salary expense for each department**.
+
 ---
+
+## ✅ **Customer & Orders**
 
 **✅ 11.** Retrieve the **customers who never placed an order**.  
 **🔥 12.** List the **top 5 customers by total order amount**.  
@@ -76,19 +83,6 @@ CREATE TABLE OrderItems (
 ---
 
 ## **Products & Inventory**
-
-```sql
--- Products table
-CREATE TABLE Products (
-    product_id   INT PRIMARY KEY,
-    product_name NVARCHAR(100) NOT NULL,
-    category     NVARCHAR(100) NOT NULL,
-    unit_price   DECIMAL(12,2) NOT NULL,
-    stock_qty    INT NOT NULL
-);
-```
-
----
 
 **✅ 20.** Show the **total sales by product category**.  
 **✅ 21.** Retrieve the **products that were never ordered**.  
